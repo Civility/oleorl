@@ -1,0 +1,117 @@
+﻿https://github.com/denpatin/avalon-s3-ror/blob/master/lab1/git.md
+
+https://www.getpostman.com/
+
+создали проект aip
+cmd
+rails new oleorl --api 
+
+в проекте
+gem i bundler
+
+
+Добавили в гем фаил
+gem 'pg','~>0.18'
+gem 'active_model_serializers'
+gem 'activerecord-reset-pk-sequence'
+
+group :development do
+  gem 'listen','~> 3.0.5'
+  gem 'spring'
+  gem 'spring-watcher-listen','~>2.0.0'
+
+  gem 'better_errors'
+  gem 'binding_of_caller'
+
+  gem 'guard'
+  gem 'guard-bundler', require: false
+  gem 'guard-rspec', require: false
+
+  gem 'rspec-rails', '~3.5' #, :github => 'rspec/rspec-rails'
+  gem 'rails-controller-testing'
+
+  gem 'rubocop', require: false
+  gem 'rubocop-rspec'
+  gem 'guard-rubocop'
+end
+
+group :test do
+  gem 'factory_girl_rails'
+  gem 'faker'
+  gem 'database_cleaner'
+end
+
+# гем считает процент покрытия % тестами :coverage
+group :coverage do
+  gem 'simplecov', :require =>  false
+end
+
+(запустить с cmd bundle exec guard для запуска гема нужного нам)
+(гем сет стоит делать отдельно для каждого проекта отдельно)
+
+bundler install
+
+C:\Program Files\PostgreSQL\9.6\scripts
+запустить фаил runpsql
+
+localhost
+postgres
+5432
+password
+
+выведет
+postgres =#
+
+CREATE ROLE admin;
+
+просмотр команд psql \dg
+
+просмотр команд psql: \l
+
+Server [localhost]: localhost
+Database [postgres]: postgres
+Port [5432]: 5432
+Username [postgres]: postgres
+Пароль пользователя postgres:
+psql (9.6.2)
+ПРЕДУПРЕЖДЕНИЕ: Кодовая страница консоли (866) отличается от основной
+                страницы Windows (1251).
+                8-битовые (русские) символы могут отображаться некорректно.
+                Подробнее об этом смотрите документацию psql, раздел
+                "Notes for Windows users".
+Введите "help", чтобы получить справку.
+
+postgres=# CREATE ROLE admin;
+CREATE ROLE
+postgres=# CREATE DATABASE oleorl_development OWNER admin;
+postgres=# CREATE DATABASE oleorl_test OWNER admin;
+postgres=# CREATE DATABASE oleorl_production OWNER admin;
+
+установка пароля для роли
+ALTER ROLE admin WITH LOGIN PASSWORD 'password';
+
+предоставление прав доступа для созданной роли
+GRANT ALL PRIVILEGES ON DATABASE oleorl_development,oleorl_test,oleorl_production TO admin;
+
+Просмотр созданных ролей локально: #\bg
+Выход из сервера: #\q
+Выход из PG: #exit
+
+
+зашли в D:\Users\oleorl\config secret.yml
+Добавили пароли к базам
+
+development:
+  database:
+    :password: password
+  secret_key_base: bb2e0f5e715b66877bb6b2cd0c2839ae2806bf21dabb1dbd9a5bf0dddfd605ac9fe583ae252065ecab5c70158ce724320a4b328175cbf412a1ca7b415977f28e
+
+ test:
+   database:
+    :password: password
+  secret_key_base: 8428f26b00edaf7d84ccfd352f7a7568b91a15d8a0cbc29671fb504c69203f5a413379c50ad82baea35a52ad6ef545d8013f156df9a08d2d9c16606c08ea98cf
+  
+ production:
+   database:
+    :password: <%= ENV["PRODUCTION_DATABASE_PASSWORD"] %>
+  secret_key_base: <%= ENV["SECRET_KEY_BASE"] %>
